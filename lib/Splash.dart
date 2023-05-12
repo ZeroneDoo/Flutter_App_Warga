@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_warga/Pages/LoginPage.dart';
 import 'package:lottie/lottie.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -10,19 +11,19 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-  // @override
-  // void initState() {
-  //   super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-  //   Future.delayed(const Duration(seconds: 3)).then((value) {
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //         builder: (context) => const ,
-  //       )
-  //     );
-  //   });
-  // }
+    Future.delayed(const Duration(seconds: 3)).then((value) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Login(),
+        )
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
