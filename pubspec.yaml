@@ -38,6 +38,8 @@ dependencies:
   shared_preferences: ^2.1.1
   http: ^0.13.6
   google_fonts: ^4.0.4
+  lottie: ^2.3.2
+  loading_animation_widget: ^1.2.0+4
 
 dev_dependencies:
   flutter_test:
@@ -80,9 +82,9 @@ flutter:
   fonts:
     - family: Quicksand
       fonts:
-        - asset: assets/font/Quicksand/
+        - asset: assets/font/Quicksands/Quicksand-Regular.ttf
     - family: Poppin
       fonts:
-        - asset: assets/font/Poppins/
+        - asset: assets/font/Poppins/Poppins-Regular.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
