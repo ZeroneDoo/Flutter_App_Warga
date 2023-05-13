@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_warga/Network/api.dart';
 import 'package:lottie/lottie.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -9,6 +12,15 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  // PickedFile? _pickedImage;
+
+  // Future<void> _pickImage() async {
+  //   final ImagePicker _picker = ImagePicker();
+  //   final pickedImage = await _picker.getImage(source: ImageSource.gallery);
+  //   setState(() {
+  //     _pickedImage = pickedImage;
+  //   });
+  // }
   @override
   JenisKelamin? selectedValue;
   List<JenisKelamin> jenis = [
@@ -17,6 +29,19 @@ class _ProfileState extends State<Profile> {
   ];
 
   bool password = true;
+
+  Future getToken() async {
+    var token = await hasToken();
+    var data = await getData(token);
+    print(data);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getToken();
+    // print("ok");
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,6 +90,9 @@ class _ProfileState extends State<Profile> {
                 ),
                 const Spacer(),
                 GestureDetector(
+                  onTap: () {
+                    
+                  },
                   child: const Text('Ubah', style: TextStyle(
                     color: Colors.blueAccent
                   ),),

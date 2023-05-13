@@ -3,6 +3,7 @@ import 'package:flutter_warga/Layouts/MainLayout.dart';
 import 'package:flutter_warga/Pages/ProfilePage.dart';
 import 'package:lottie/lottie.dart';
 import 'RegisterPage.dart';
+import '../Network/api.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -12,7 +13,33 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   bool password = true;
+
+  late String message = '';
+
+  Future loginWarga(email, pasword, device) async {
+    var dataLogin =
+        await login(emailController.text, passwordController.text, device);
+    if (dataLogin['message'] != 'failed') {
+      String text = dataLogin['data']['token'];
+      List<String> tokenApi = text.split('|');
+      await setLocalToken(tokenApi[1]);
+      // ignore: use_build_context_synchronously
+      await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MainLayouts(),
+          ));
+    } else {
+      setState(() {
+        message = dataLogin['data'];
+      });
+      return message;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,16 +83,17 @@ class _LoginState extends State<Login> {
                   height: 20,
                 ),
                 // Input Start
-                const Row(
+                Row(
                   children: [
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(top: 12),
                       child: Icon(Icons.alternate_email_rounded),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: TextField(
-                        decoration: InputDecoration(
+                        controller: emailController,
+                        decoration: const InputDecoration(
                           // contentPadding: EdgeInsets.symmetric(horizontal: 10), ini buat ngasih jarak text
                           border: UnderlineInputBorder(),
                           labelText: 'Email',
@@ -86,14 +114,18 @@ class _LoginState extends State<Login> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: TextField(
+                        controller: passwordController,
                         decoration: InputDecoration(
-                          labelText: 'Password',
-                          suffixIcon: IconButton(onPressed: (){
-                            setState(() {
-                              password = !password;
-                            });
-                          }, icon: Icon(password == false ? Icons.visibility : Icons.visibility_off))
-                        ),
+                            labelText: 'Password',
+                            suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    password = !password;
+                                  });
+                                },
+                                icon: Icon(password == false
+                                    ? Icons.visibility
+                                    : Icons.visibility_off))),
                         obscureText: password,
                       ),
                     ),
@@ -137,12 +169,8 @@ class _LoginState extends State<Login> {
                           }),
                         ),
                         onPressed: () {
-                          Navigator.push(
-                            context, 
-                            MaterialPageRoute(
-                              builder: (context) => const MainLayouts(),
-                            )
-                          );
+                          loginWarga(
+                              emailController, passwordController, "Realmi");
                         },
                         child: const Text('Continue'),
                       )),
@@ -151,26 +179,31 @@ class _LoginState extends State<Login> {
                   height: 20,
                 ),
 
+                Center(
+                  child: message.isNotEmpty
+                      ? Text(
+                          message,
+                          style: TextStyle(color: Colors.red),
+                        )
+                      : Text(''),
+                ),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('New to Logistic? '), 
+                    const Text('New to Logistic? '),
                     GestureDetector(
-                      onTap: () => {
-                        Navigator.push(
-                          context, 
-                          MaterialPageRoute(
-                            builder: (context) => const Login(),
-                          )
-                        )
-                      },
-                      child: const Text(
-                        'Register',
-                        style: TextStyle(
-                          color: Colors.blueAccent
-                        ),
-                      )
-                    )
+                        onTap: () => {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Login(),
+                                  ))
+                            },
+                        child: const Text(
+                          'Register',
+                          style: TextStyle(color: Colors.blueAccent),
+                        ))
                   ],
                 ),
               ],
